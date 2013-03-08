@@ -289,7 +289,7 @@
 					results_array.push(data);
 					data_retrieved++; 			//following is for functions that need both results and league arrays
 					if (data_retrieved == 2) {  //(see above)
-						initializePage(); 		//(see above)
+						initializePage(data); 		//(see above)
 					};							//(see above)
 				}
 			});
@@ -297,20 +297,20 @@
 			$.ajax({ //grabs teams
 				type: 'GET', 
 				url: '/backliftapp/team', 
-				success: function (data) { 
+				success: function (data) {
 					league_array.push(data);
 					printTeam(data); // populates table on load
 					data_retrieved++; 			//following is for functions that need both results and league arrays
 					if (data_retrieved == 2) {  //(see above)
-						initializePage(); 		//(see above)
+						initializePage(data); 		//(see above)
 					}; 							//(see above)
 					enterScoresPop(); //populates enter scores modal
 					sortTable(); // loads and triggers tablesorter on an empty table
 				}
 			});   //end print standings/schedule call  
 
-			function initializePage() { //functions that require both league_array and results_array to be populated
-				scheduleWrite(); //populates scoreboard/schedule
+			function initializePage(data) { //functions that require both league_array and results_array to be populated
+				scheduleWrite(data); //populates scoreboard/schedule
 				buttonColor(); //changes start season button color based on league size
 				weekPop(); //populates weeks menu in enter scores modal
 			}
@@ -478,6 +478,7 @@
 			$.ajax({type: 'GET', url: '/backliftapp/team', 
 				success: function (data) {			
 					scheduleWrite(data);
+					console.log(data);
 				}
 			});  
 			clicker = 0;
@@ -488,24 +489,24 @@
 			$(this).next('.slide_body').slideToggle();
 		});//end slide function
 
-		function scheduleWrite() {  			//Decides which function to call to write schedule table (odd or even)
+		function scheduleWrite(data) {  			//Decides which function to call to write schedule table (odd or even)
 
-			if (league_array[0].length < 4) {
+			if (data.length < 4) {
 				$('#schedule_table').hide();
 				return false;
 			}
-			else if (league_array[0].length === 4) {
+			else if (data.length === 4) {
 				$('#schedule_table').show();
 				sched = sched4;
 			}
-			else if (league_array[0].length === 5 || league_array[0].length === 6) {
+			else if (data.length === 5 || data.length === 6) {
 				sched = sched6;
 			}
 			else {
 				sched = sched8;
 			}; // end set sched variable
 
-			if (league_array[0].length % 2 !== 0) {
+			if (data.length % 2 !== 0) {
 				writeSchedOdd(sched);
 			}
 			else {
