@@ -223,6 +223,7 @@
 					results_array.push(game);
 				}
 			};
+			pageRefresh();
 		}); 
 
 		$('.score_inputs').each(function(){
@@ -721,7 +722,7 @@
 		//===========================================================
 
 		function resetSeason () {
-			var refresh_count = 0;git
+			var refresh_count = 0;
 
 			$.ajax({ //wipes results from server
 				type: 'GET',
